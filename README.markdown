@@ -3,9 +3,9 @@ About
 
 UrCPU is a virtual CPU for running
 [UrScheme](http://www.canonical.org/~kragen/sw/urscheme). UrCPU takes the x86
-GNU Assembly output, parses it, and interprets the assembly commands. UrCPU is
-intended only to be powerful enough to run UrScheme and it is not a general
-purpose virtualized x86 CPU.
+GNU Assembly output from UrScheme, parses it, and interprets the assembly
+instructions. UrCPU is intended only to be powerful enough to run UrScheme and
+it is not a general purpose virtualized x86 CPU or assembler.
 
 UrCPU is primarily a pedagogical exercise in learning x86 assembly and the
 internals of a self-hosting Scheme compiler.
