@@ -11,4 +11,5 @@ def setup_cpu(options={})
       raise ArgumentError, "Unknown setup_cpu option: #{name.inspect}"
     end
   end
+  @cpu
 end
