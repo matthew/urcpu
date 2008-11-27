@@ -1,28 +1,25 @@
 About
 =====
 
+UrCPU is a virtual CPU for running
+[UrScheme](http://www.canonical.org/~kragen/sw/urscheme). UrCPU takes the x86
+GNU Assembly output, parses it, and interprets the assembly commands. UrCPU is
+intended only to be powerful enough to run UrScheme and it is not a general
+purpose virtualized x86 CPU.
+
+UrCPU is primarily a pedagogical exercise in learning x86 assembly and the
+internals of a self-hosting Scheme compiler.
+
 Install
 =======
 
-Get the gem:
+Unusable at the moment. Get the code from
+[GitHub](http://github.com/matthew/method_lister/tree/master).
 
-    # Add GitHub as a Gem Source (only have to do this once)
-    gem sources -a http://gems.github.com
-    
-    # Install the gem
-    sudo gem install matthew-urcpu
-    
-    # Otherwise, build the gem and install it
-    rake gem
-    sudo gem install pkg/*.gem
-
-Open up `~/.irbrc` and add these lines:
-
-    require 'rubygems'
-    require 'urcpu'
-    
 Usage
 =====
+
+Unusable at the moment.
 
 License
 =======
