@@ -14,7 +14,7 @@ Install
 =======
 
 Unusable at the moment. Get the code from
-[GitHub](http://github.com/matthew/method_lister/tree/master).
+[GitHub](http://github.com/matthew/urcpu/tree/master).
 
 Usage
 =====
