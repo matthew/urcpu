@@ -2,3 +2,4 @@ coverage*
 *.swp
 pkg/*
 spike.rb
+tmp/*
