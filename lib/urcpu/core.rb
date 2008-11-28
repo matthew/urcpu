@@ -6,9 +6,9 @@ module UrCPU
       @memory = memory
       @registers = Registers.new
       @os = OS.new(self)
-      registers[:eip] = memory.text_start
-      registers[:ebp] = memory.data_start
-      registers[:esp] = memory.stack_start
+      registers[:eip] = memory.section("text")
+      registers[:ebp] = memory.section("data")
+      registers[:esp] = memory.section("stack")
     end
     
     def read_instruction

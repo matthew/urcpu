@@ -3,15 +3,14 @@ require File.expand_path(File.dirname(__FILE__) + "/../spec_helper")
 describe UrCPU::Core do
   before do
     memory = UrCPU::Memory.new
-    memory.start_text!
     @program = [
       :mov_imm_reg, 2, :eax,
       :mov_imm_reg, 5, :ebx,
       :add_reg_reg, :eax, :ebx,
     ]
     memory.concat @program
-    memory.start_data!
-    memory.start_stack!
+    memory.section("data")
+    memory.section("stack")
 
     @cpu = UrCPU::Core.new(memory)
   end

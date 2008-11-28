@@ -17,19 +17,42 @@ describe UrCPU::Memory do
     end
   end
   
-  describe "#start_*!" do
+  describe "labels" do
     before do
-      @memory = UrCPU::Memory.new
+      @memory = UrCPU::Memory.new([1, 2, 3, 4])
     end
     
-    UrCPU::Memory::SECTIONS.each do |section|
-      it "start_#{section}! and #{section}_start" do
-        method = "#{section}_start"
-        @memory.concat [1, 2, 3, 4, 5]
-        @memory.send("start_#{section}!")
-        @memory.send("#{section}_start").should == 5
-        @memory.concat [6, 7, 8, 9, 10]
-        @memory.send("#{section}_start").should == 5
+    it "the label is assigned the current memory address" do
+      @memory.set_label("foo")
+      @memory.label("foo").should == @memory.length
+    end
+
+    it "the label is assigned the given memory address" do
+      @memory.set_label("foo", 3)
+      @memory.label("foo").should == 3
+    end
+    
+    it "should raise an exception if an unknown label is given" do
+      lambda { @memory.label("foo") }.should raise_error(UrCPU::IllegalLabel)
+    end
+    
+    it "should raise an exception if the label name is nil" do
+      lambda { @memory.set_label(nil) }.should raise_error(UrCPU::IllegalLabel)
+    end
+  
+    describe "#section" do
+      it "a section is just a special label" do
+        mock(@memory).set_label("___text___", 5)
+        @memory.set_section("text", 5)
+
+        mock(@memory).label("___text___")
+        @memory.section("text")
+      end
+      
+      it "allows for accessing labels right away" do
+        UrCPU::Memory::SECTIONS.each do |section|
+          @memory.section(section).should == @memory.length
+        end
       end
     end
   end
