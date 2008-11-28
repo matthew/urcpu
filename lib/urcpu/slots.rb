@@ -1,22 +1,23 @@
 module UrCPU
-  class SlotContainer
+  class Slots
     def self.slots
       []
     end
     
     def initialize(default)
       @default = default
+      @state = Hash.new
       reset!
     end
     
     def [](slot)
       assert_valid_slot(slot)
-      instance_variable_get("@#{slot}")
+      @state[slot]
     end
     
     def []=(slot, value)
       assert_valid_slot(slot)
-      instance_variable_set("@#{slot}", value)
+      @state[slot] = value
     end
     
     def reset!

@@ -3,7 +3,7 @@ $: << ROOT_DIR
 
 require 'urcpu/exceptions.rb'
 
-require 'urcpu/slot_container.rb'
+require 'urcpu/slots.rb'
 require 'urcpu/flags.rb'
 require 'urcpu/registers.rb'
 

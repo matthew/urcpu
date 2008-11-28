@@ -1,5 +1,5 @@
 module UrCPU
-  class Registers < SlotContainer
+  class Registers < Slots
     REGISTERS = [:eax, :ebx, :ecx, :edx, :esp, :ebp, :edi, :esi, :eip]
     attr_reader :flags
 

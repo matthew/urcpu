@@ -1,5 +1,5 @@
 module UrCPU
-  class Flags < SlotContainer
+  class Flags < Slots
     FLAGS = [:zf]
     
     def self.slots
