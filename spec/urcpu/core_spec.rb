@@ -154,4 +154,29 @@ describe UrCPU::Core do
       lambda { @cpu.int_imm }.should raise_error(UrCPU::BusError)
     end
   end
+  
+  describe "#jmp_lbl" do
+    it "changes EIP to the memory address associated with the given label" do
+      setup_cpu(:eip => 0, :program => [:test_label])
+      mock(@cpu.memory).label(anything) { 97 }
+      @cpu.jmp_lbl
+      @cpu.registers[:eip].should == 97
+    end
+  end
+  
+  describe "#jz_lbl" do
+    it "changes EIP to the labeled address if ZF is true" do
+      setup_cpu(:eip => 0, :zf => true, :program => [:test_label])
+      stub(@cpu.memory).label(anything) { 97 }
+      @cpu.jz_lbl
+      @cpu.registers[:eip].should == 97
+    end
+
+    it "does not change EIP to the labeled address if ZF is false" do
+      setup_cpu(:eip => 0, :zf => false, :program => [:test_label])
+      stub(@cpu.memory).label(anything) { 97 }
+      @cpu.jz_lbl
+      @cpu.registers[:eip].should_not == 97
+    end
+  end
 end
