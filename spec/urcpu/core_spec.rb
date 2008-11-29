@@ -140,7 +140,7 @@ describe UrCPU::Core do
     end
   end
   
-  describe "#int_imm" do
+  describe "#int" do
     it "passes the interrupt to the OS if its 0x80" do
       setup_cpu(:program => [0x80])
       mock.proxy(@cpu).read_instructions(1)
@@ -155,7 +155,7 @@ describe UrCPU::Core do
     end
   end
   
-  describe "#jmp_lbl" do
+  describe "#jmp" do
     it "changes EIP to the memory address associated with the given label" do
       setup_cpu(:eip => 0, :program => [:test_label])
       mock(@cpu.memory).label(anything) { 97 }
@@ -164,7 +164,7 @@ describe UrCPU::Core do
     end
   end
   
-  describe "#jz_lbl" do
+  describe "#jz" do
     it "changes EIP to the labeled address if ZF is true" do
       setup_cpu(:eip => 0, :zf => true, :program => [:test_label])
       stub(@cpu.memory).label(anything) { 97 }
@@ -176,7 +176,69 @@ describe UrCPU::Core do
       setup_cpu(:eip => 0, :zf => false, :program => [:test_label])
       stub(@cpu.memory).label(anything) { 97 }
       @cpu.jz_lbl
-      @cpu.registers[:eip].should_not == 97
+      @cpu.registers[:eip].should == 1
+    end    
+  end
+
+  describe "#je" do
+    it "changes EIP to the labeled address if ZF is true" do
+      setup_cpu(:eip => 0, :zf => true, :program => [:test_label])
+      stub(@cpu.memory).label(anything) { 97 }
+      @cpu.je_lbl
+      @cpu.registers[:eip].should == 97
+    end
+
+    it "does not change EIP to the labeled address if ZF is false" do
+      setup_cpu(:eip => 0, :zf => false, :program => [:test_label])
+      stub(@cpu.memory).label(anything) { 97 }
+      @cpu.je_lbl
+      @cpu.registers[:eip].should == 1
+    end
+  end
+  
+  describe "#jnz" do
+    it "changes EIP to the labeled address if ZF is false" do
+      setup_cpu(:eip => 0, :zf => false, :program => [:test_label])
+      stub(@cpu.memory).label(anything) { 97 }
+      @cpu.jnz_lbl
+      @cpu.registers[:eip].should == 97
+    end
+
+    it "does not change EIP to the labeled address if ZF is true" do
+      setup_cpu(:eip => 0, :zf => true, :program => [:test_label])
+      stub(@cpu.memory).label(anything) { 97 }
+      @cpu.jnz_lbl
+      @cpu.registers[:eip].should == 1
+    end    
+  end
+
+  describe "#jne" do
+    it "changes EIP to the labeled address if ZF is false" do
+      setup_cpu(:eip => 0, :zf => false, :program => [:test_label])
+      stub(@cpu.memory).label(anything) { 97 }
+      @cpu.jne_lbl
+      @cpu.registers[:eip].should == 97
+    end
+
+    it "does not change EIP to the labeled address if ZF is true" do
+      setup_cpu(:eip => 0, :zf => true, :program => [:test_label])
+      stub(@cpu.memory).label(anything) { 97 }
+      @cpu.jne_lbl
+      @cpu.registers[:eip].should == 1
+    end    
+  end
+  
+  describe "#cmp" do
+    it "sets ZF to true if the value is equal to the value in the register" do
+      setup_cpu(:eax => 97, :zf => false, :program => [97, :eax])
+      @cpu.cmp_imm_reg
+      @cpu.registers.flags[:zf].should be_true
+    end
+
+    it "sets ZF to false if the value is not equal to the value in the register" do
+      setup_cpu(:eax => 97, :zf => true, :program => [32, :eax])
+      @cpu.cmp_imm_reg
+      @cpu.registers.flags[:zf].should be_false
     end
   end
 end

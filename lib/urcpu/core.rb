@@ -73,5 +73,19 @@ module UrCPU
         registers[:eip] = memory.label(label)
       end
     end
+    alias :je_lbl :jz_lbl
+
+    def jnz_lbl
+      label = read_instruction
+      unless registers.flags[:zf]
+        registers[:eip] = memory.label(label)
+      end
+    end
+    alias :jne_lbl :jnz_lbl
+    
+    def cmp_imm_reg
+      imm, reg = read_instructions(2)
+      registers.flags[:zf] = (imm == registers[reg])
+    end
   end
 end
