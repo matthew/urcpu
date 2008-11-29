@@ -241,4 +241,72 @@ describe UrCPU::Core do
       @cpu.registers.flags[:zf].should be_false
     end
   end
+  
+  describe "stack operations" do
+    describe "#push" do
+      it "it places the value at ESP and then increments ESP" do
+        setup_cpu(:esp => 5, :program => [97])
+        @cpu.push_imm
+        @cpu.registers[:esp].should == 6
+        @cpu.memory[5].should == 97
+      end
+
+      it "it places the register at ESP and then increments ESP" do
+        setup_cpu(:eax => 97, :esp => 5, :program => [:eax])
+        @cpu.push_reg
+        @cpu.registers[:esp].should == 6
+        @cpu.registers[:eax].should == 97
+        @cpu.memory[5].should == 97
+      end
+    end
+
+    describe "#pop" do
+      it "it places the value at ESP into the register then decrements ESP" do
+        setup_cpu(:esp => 6, :program => [:eax, 1, 2, 3, 4, 97])
+        @cpu.pop_reg
+        @cpu.registers[:esp].should == 5
+        @cpu.registers[:eax].should == 97
+        @cpu.memory[5].should == 97
+      end
+    end
+
+    describe "integrated" do
+      it "behaves like a stack" do
+        setup_cpu(:esp => 4, :program => [97, 101, :eax, :ebx])
+        @cpu.push_imm
+        @cpu.push_imm
+        @cpu.memory[4].should == 97
+        @cpu.memory[5].should == 101
+        @cpu.registers[:esp].should == 6
+        @cpu.pop_reg
+        @cpu.pop_reg
+        @cpu.registers[:eax].should == 101
+        @cpu.registers[:ebx].should == 97
+        @cpu.registers[:esp].should == 4
+      end
+    end
+  end
+  
+  describe "subroutines" do
+    describe "#call" do
+      it "puts EIP on the stack and changes EIP to the labeled address" do
+        original_eip = 0
+        setup_cpu(:eip => original_eip, :esp => 100, :program => [:some_func])
+        mock(@cpu.memory).label(:some_func) { 5 }
+        @cpu.call_lbl
+        @cpu.registers[:eip].should == 5
+        @cpu.registers[:esp].should == 101
+        @cpu.memory[100].should == original_eip + 1
+      end
+    end
+
+    describe "#ret" do
+      it "restores EIP by popping it off the stack" do
+        setup_cpu(:eip => 0, :esp => 1, :program => [97])
+        @cpu.ret
+        @cpu.registers[:eip].should == 97
+        @cpu.registers[:esp].should == 0
+      end
+    end
+  end
 end

@@ -87,5 +87,39 @@ module UrCPU
       imm, reg = read_instructions(2)
       registers.flags[:zf] = (imm == registers[reg])
     end
+    
+    def push_imm
+      push read_instruction
+    end
+
+    def push_reg
+      push registers[read_instruction]
+    end
+
+    def pop_reg
+      pop read_instruction
+    end
+    
+    def call_lbl
+      label = read_instruction
+      push registers[:eip]
+      registers[:eip] = memory.label(label)
+    end
+    
+    def ret
+      pop :eip
+    end
+    
+    private
+    
+    def push(val)
+      memory[registers[:esp]] = val
+      registers[:esp] += 1
+    end
+
+    def pop(reg)
+      registers[:esp] -= 1
+      registers[reg] = memory[registers[:esp]]
+    end
   end
 end
