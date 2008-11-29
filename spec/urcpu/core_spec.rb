@@ -298,7 +298,7 @@ describe UrCPU::Core do
       setup_cpu(:eax => 5, :ebx => 7, :program => [:eax, :ebx])
       @cpu.xor_reg_reg
       @cpu.registers[:eax].should == 5
-      @cpu.registers[:ebx].should == 2
+      @cpu.registers[:ebx].should == 2  # 101 ^ 111 == 010 == base10(2)
     end
   end
   

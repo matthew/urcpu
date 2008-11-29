@@ -8,12 +8,14 @@ if running_under_textmate?
   module Kernel
     alias :original_puts :puts
     def puts(*args)
+      args = ["\n"] if args.empty?
       args = args.map {|arg| convert_to_html(arg.to_s + "\n") }
       original_print *args
     end
   
     alias :original_p :p
     def p(*args)
+      args = ["\n"] if args.empty?
       args = args.map {|arg| convert_to_html(arg.inspect + "\n") }
       original_print *args
     end
