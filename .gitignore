@@ -3,3 +3,4 @@ coverage*
 pkg/*
 spike.rb
 tmp/*
+.DS_Store
