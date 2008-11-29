@@ -309,4 +309,13 @@ describe UrCPU::Core do
       end
     end
   end
+  
+  describe "#hlt" do
+    it "halts the running of the CPU" do
+      setup_cpu
+      @cpu.should_not be_halted
+      @cpu.hlt
+      @cpu.should be_halted
+    end
+  end
 end

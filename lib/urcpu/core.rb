@@ -3,12 +3,17 @@ module UrCPU
     attr_reader :registers, :memory, :os
     
     def initialize(memory)
+      @halted = false
       @memory = memory
       @registers = Registers.new
       @os = OS.new(self)
       registers[:eip] = memory.section("text")
       registers[:ebp] = memory.section("data")
       registers[:esp] = memory.section("stack")
+    end
+    
+    def halted?
+      @halted
     end
     
     def read_instruction
@@ -108,6 +113,10 @@ module UrCPU
     
     def ret
       pop :eip
+    end
+    
+    def hlt
+      @halted = true
     end
     
     private
