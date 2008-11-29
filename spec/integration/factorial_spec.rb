@@ -7,7 +7,6 @@ describe "Factorial" do
     @memory.set_section("text")
     @memory.set_label(:start)
         @memory.concat [
-          :mov_imm_reg, 5, :eax,
           :call_lbl, :fact,
           :hlt
         ]
@@ -56,8 +55,15 @@ describe "Factorial" do
     @cpu = UrCPU::Core.new(@memory)
   end
   
-  it "runs the program correctly" do
-    @cpu.run
-    @cpu.registers[:eax].should == 120
+  def fact(n)
+    (1 .. n).inject(1) { |p,k| p * k }
+  end
+
+  (0 .. 10).each do |n|
+    it "computes the factorial of N=#{n}" do
+      @cpu.registers[:eax] = n
+      @cpu.run
+      @cpu.registers[:eax].should == fact(n)
+    end
   end
 end
