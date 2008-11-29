@@ -26,6 +26,20 @@ module UrCPU
       instructions
     end
     
+    def dispatch_instruction(instruction)
+      if respond_to? instruction
+        send(instruction)
+      else
+        raise IllegalInstruction, "Unknown instruction: #{instruction.inspect}"
+      end
+    end
+    
+    def run
+      while !halted?
+        dispatch_instruction read_instruction
+      end
+    end
+    
     def mov_imm_reg
       imm, reg = read_instructions(2)
       registers[reg] = imm

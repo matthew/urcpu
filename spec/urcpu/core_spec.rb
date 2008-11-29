@@ -58,6 +58,55 @@ describe UrCPU::Core do
     end
   end
   
+  describe "#run" do
+    before do
+      setup_cpu
+    end
+    
+    it "reads instructions and dispatches them" do
+      mock(@cpu).read_instruction { :mcguffin }
+      mock(@cpu).dispatch_instruction(:mcguffin) { @cpu.hlt }
+      @cpu.run
+    end
+    
+    it "does not run if halted" do
+      mock(@cpu).halted? { true }
+      dont_allow(@cpu).read_instruction
+      dont_allow(@cpu).dispatch_instruction
+      @cpu.run
+    end
+    
+    describe "example program" do
+      it "runs the program" do
+        setup_cpu(:esp => 100, :program => [
+          :mov_imm_reg, 2, :eax,
+          :mov_imm_reg, 5, :ebx,
+          :add_reg_reg, :eax, :ebx,
+          :hlt
+        ])
+        @cpu.run
+        @cpu.registers[:ebx].should == 7
+      end
+    end
+  end
+
+  describe "#dispatch_instruction" do
+    before do
+      setup_cpu
+    end
+    
+    it "correctly invokes the instruction" do
+      mock(@cpu).mov_imm_reg
+      @cpu.dispatch_instruction(:mov_imm_reg)
+    end
+
+    it "raises an error if the instruction is unknown" do
+      lambda do
+        @cpu.dispatch_instruction(:i_do_not_exist)
+      end.should raise_error(UrCPU::IllegalInstruction)
+    end
+  end
+  
   describe "#mov" do
     describe "immediate/register" do
       it "moves the value into the register" do
