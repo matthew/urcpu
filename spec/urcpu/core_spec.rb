@@ -291,6 +291,17 @@ describe UrCPU::Core do
     end
   end
   
+  describe "#xor" do
+    it "xors the two given registers together" do
+      # base10(5) == base2(101)
+      # base10(7) == base2(111)
+      setup_cpu(:eax => 5, :ebx => 7, :program => [:eax, :ebx])
+      @cpu.xor_reg_reg
+      @cpu.registers[:eax].should == 5
+      @cpu.registers[:ebx].should == 2
+    end
+  end
+  
   describe "stack operations" do
     describe "#push" do
       it "it places the value at ESP and then increments ESP" do
