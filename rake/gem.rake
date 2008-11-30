@@ -1,7 +1,7 @@
 Gem::manage_gems
 
 require 'rake/gempackagetask'
-load "#{ROOT_DIR}/urcpu.gemspec"
+load "#{URCPU_RAKE_ROOT_DIR}/urcpu.gemspec"
 
 Rake::GemPackageTask.new(GemSpec) do |pkg|
     pkg.need_tar = true

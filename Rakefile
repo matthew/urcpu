@@ -1,8 +1,8 @@
-ROOT_DIR = File.expand_path(File.dirname(__FILE__))
+URCPU_RAKE_ROOT_DIR = File.expand_path(File.dirname(__FILE__))
 
 require 'rubygems' rescue nil
 require 'rake'
-Dir["#{ROOT_DIR}/rake/*.rake"].each {|file| load file}
+Dir["#{URCPU_RAKE_ROOT_DIR}/rake/*.rake"].each {|file| load file}
 
 task :default => :spec
 
