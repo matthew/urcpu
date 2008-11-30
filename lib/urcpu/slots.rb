@@ -1,9 +1,5 @@
 module UrCPU
   class Slots
-    def self.slots
-      []
-    end
-    
     def initialize(default)
       @default = default
       @state = Hash.new

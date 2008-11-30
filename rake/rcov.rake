@@ -3,7 +3,8 @@ namespace :spec do
   task :rcov  => [:clean] do
     opts = File.open("#{URCPU_RAKE_ROOT_DIR}/spec/rcov.opts").readlines.map {|l| l.strip}
     rcov = "rcov #{opts.join(' ')}"
-    system("#{rcov} #{URCPU_RAKE_ROOT_DIR}/spec/*_spec.rb")
+    specs = Dir["#{URCPU_RAKE_ROOT_DIR}/spec/**/*_spec.rb"].to_a
+    system("#{rcov} #{specs.join(' ')}")
     system("open coverage/index.html") if RUBY_PLATFORM =~ /darwin/i
   end
 end
