@@ -1,4 +1,5 @@
 require 'urcpu/assembler/parser/token'
+require 'urcpu/assembler/parser/address_mode_token'
 require 'urcpu/assembler/parser/line_type'
 
 module UrCPU
@@ -7,22 +8,8 @@ module UrCPU
       TOKENS = [
         Token.new(:ins, /(\w+)/) { |ins| ins.to_sym },
         Token.new(:reg, /%(\w+)/) { |reg| reg.to_sym },
-        Token.new(:imm, /\$(\d+(?:x\d+)?)/) { |imm| eval imm },
-        
-        # (base)
-        # (base, index)
-        # (base, index, scale)
-        # offset(base)
-        # offset(base, index)
-        # offset(base, index, scale)
-        Token.new(:adr, /(\d+)?\(%?(\w+)(?:,\s*(\d+)){0,2}\)/) { |offset, base, index, scale|
-          [{:offset => offset.to_i,
-            :base => base.to_sym,
-            :index => index.to_i,
-            :scale => scale.to_i,
-          }]
-        },
-        
+        Token.new(:imm, /\$(\d+(?:x\d+)?)/) { |imm| eval imm },        
+        AddressModeToken.new(:adr),
         Token.new(:label, /(\w+)/) { |lbl| lbl.to_sym },
         Token.new(:space, /\s+/),
         Token.new(:comma, /,\s*/),

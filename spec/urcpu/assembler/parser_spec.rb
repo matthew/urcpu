@@ -39,7 +39,13 @@ describe UrCPU::Assembler::Parser do
         it "parses INS OFFSET(REG_BASE), REG" do
           p("lea 8(%eax), %ebx").should == [
             :lea,
-            {:offset => 8, :base => :eax, :index => 0, :scale => 0},
+            {
+              :offset => 8, 
+              :base => :eax,
+              :base_type => :register,
+              :index => 0, 
+              :scale => 0
+            },
             :ebx
           ]
         end
@@ -48,7 +54,13 @@ describe UrCPU::Assembler::Parser do
           p("movl %esp, (stack_bottom)").should == [
             :movl,
             :esp,
-            {:offset => 0, :base => :stack_bottom, :index => 0, :scale => 0}
+            {
+              :offset => 0,
+              :base => :stack_bottom,
+              :base_type => :label,
+              :index => 0,
+              :scale => 0
+            }
           ]
         end
       end
