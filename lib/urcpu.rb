@@ -1,14 +1,15 @@
 URCPU_ROOT = File.expand_path(File.dirname(__FILE__))
 $: << URCPU_ROOT
 
-require 'urcpu/exceptions.rb'
+require 'urcpu/exceptions'
 
-require 'urcpu/slots.rb'
-require 'urcpu/flags.rb'
-require 'urcpu/registers.rb'
+require 'urcpu/slots'
+require 'urcpu/flags'
+require 'urcpu/registers'
 
-require 'urcpu/instructions.rb'
+require 'urcpu/memory'
+require 'urcpu/os'
+require 'urcpu/instructions'
+require 'urcpu/core'
 
-require 'urcpu/memory.rb'
-require 'urcpu/os.rb'
-require 'urcpu/core.rb'
+require 'urcpu/assembler'
