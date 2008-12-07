@@ -15,16 +15,20 @@ module UrCPU
         Token.new(:comma, /,\s*/),
         Token.new(:eol, /\s*$/),
         Token.new(:comment, /#.*$/),
+        Token.new(:arth, /\$(\d+(?:x\d+)?)\s*\+\s*(\d+)<<(\d+)/) { |imm, base, shift|
+          eval(imm) + (base.to_i << shift.to_i)
+        }
       ]
       
       LINE_TYPES = [
         LineType.new(:ins_imm_reg, [:ins, :space, :imm, :comma, :reg, :eol]),
         LineType.new(:ins_reg_reg, [:ins, :space, :reg, :comma, :reg, :eol]),
+        LineType.new(:ins_adr_reg, [:ins, :space, :adr, :comma, :reg, :eol]),
+        LineType.new(:ins_reg_adr, [:ins, :space, :reg, :comma, :adr, :eol]),
+        LineType.new(:ins_arth_reg, [:ins, :space, :arth, :comma, :reg, :eol]),
         LineType.new(:ins_label, [:ins, :space, :label, :eol]),
         LineType.new(:ins_reg, [:ins, :space, :reg, :eol]),
         LineType.new(:ins_imm, [:ins, :space, :imm, :eol]),
-        LineType.new(:ins_adr_reg, [:ins, :space, :adr, :comma, :reg, :eol]),
-        LineType.new(:ins_reg_adr, [:ins, :space, :reg, :comma, :adr, :eol]),
         LineType.new(:comment, [:comment]),
       ]
       

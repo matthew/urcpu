@@ -43,7 +43,8 @@ describe UrCPU::Assembler::Parser do
               :offset => 8, 
               :base => :eax,
               :base_type => :register,
-              :index => 0, 
+              :index => 0,
+              :index_type => :immediate,
               :scale => 0
             },
             :ebx
@@ -59,13 +60,36 @@ describe UrCPU::Assembler::Parser do
               :base => :stack_bottom,
               :base_type => :label,
               :index => 0,
+              :index_type => :immediate,
               :scale => 0
             }
+          ]
+        end
+
+        it "parses INS OFFSET(BASE,LABEL), REG" do
+          p("lea 8(%eax,%edx), %ebx").should == [
+            :lea,
+            {
+              :offset => 8,
+              :base => :eax,
+              :base_type => :register,
+              :index => :edx,
+              :index_type => :register,
+              :scale => 0
+            },
+            :ebx
           ]
         end
       end
 
       describe "arithmetic" do
+        it "parses INS IMM + DIGITS<<DIGITS, REG" do
+          p("movl $2 + 256<<2, %eax").should == [
+            :movl,
+            1026, # 2 + 256 << 2
+            :eax
+          ]
+        end
       end
     end
   
