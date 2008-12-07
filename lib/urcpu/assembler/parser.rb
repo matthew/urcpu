@@ -8,20 +8,20 @@ module UrCPU
   class Assembler
     class Parser
       OPERANDS = [
-        AddressModeToken.new(:adr),
-        ArithmeticToken.new(:arth),
-        Token.new(:reg, /%(\w+)/) { |reg| reg.to_sym },
-        Token.new(:imm, /\$(-?\d+(?:x\d+)?)/) { |imm| eval imm },        
-        Token.new(:label, /(\w+)/) { |lbl| lbl.to_sym },
+        AddressModeToken.register(:adr),
+        ArithmeticToken.register(:arth),
+        Token.register(:reg, /%(\w+)/) { |reg| reg.to_sym },
+        Token.register(:imm, /\$(-?\d+(?:x\d+)?)/) { |imm| eval imm },        
+        Token.register(:label, /(\w+)/) { |lbl| lbl.to_sym },
       ]
       
       TOKENS = [
-        Token.new(:ins, /(\w+)/) { |ins| ins.to_sym },
-        Token.new(:space, /\s+/),
-        Token.new(:comma, /,\s*/),
-        Token.new(:eol, /\s*$/),
-        Token.new(:comment, /#.*$/),
-        CompositeToken.new(:operand, OPERANDS)
+        Token.register(:ins, /(\w+)/) { |ins| ins.to_sym },
+        Token.register(:space, /\s+/),
+        Token.register(:comma, /,\s*/),
+        Token.register(:eol, /\s*$/),
+        Token.register(:comment, /#.*$/),
+        CompositeToken.register(:operand, OPERANDS)
       ]
       
       LINE_TYPES = [

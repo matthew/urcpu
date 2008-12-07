@@ -3,6 +3,30 @@ module UrCPU
     class Parser
       class Token
         attr_reader :name
+        
+        class << self
+          def register(*args, &block)
+            Token.save new(*args, &block)
+          end
+          
+          def lookup(name)
+            if token = registry[name]
+              token
+            else
+              raise UrCPU::ParseError, "Unknown token: #{name.inspect}"
+            end
+          end
+          
+          def save(token)
+            registry[token.name] = token
+          end
+
+          private
+          
+          def registry
+            @registry ||= Hash.new
+          end
+        end
       
         def initialize(name, regex, &block)
           @name = name
