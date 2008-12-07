@@ -31,7 +31,7 @@ module UrCPU
         @file.readlines.each do |line|
           line_num += 1
           unless @parser.parse_line(line)
-            unparsed << "#{@file_name}:#{line_num} #{line}"
+            unparsed << "#{File.basename @file_name}:#{line_num} #{line}"
             break if unparsed.size == @limit
           end
         end
