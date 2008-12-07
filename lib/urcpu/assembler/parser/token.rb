@@ -2,6 +2,8 @@ module UrCPU
   class Assembler
     class Parser
       class Token
+        include Debug
+
         attr_reader :name
         
         class << self
@@ -36,11 +38,12 @@ module UrCPU
       
         def match(line)
           if match = line.match(match_regex)
-            debug "MATCH: token=#{name} match=#{match} captures=#{match.captures.inspect} line=#{line}"
+            debug "MATCH #{name}: match=#{match.to_s.inspect} " +
+                  "captures=#{match.captures.inspect} line=#{line.inspect}"
             line.gsub!(match_regex, "")
             serialize match.captures
           else
-            debug "NO MATCH: token=#{name} line=#{line}"
+            debug "NO MATCH #{name}: line=#{line.inspect}"
             nil
           end
         end
@@ -57,10 +60,6 @@ module UrCPU
           Array(
             serializer ? serializer.call(*captures) : nil
           )
-        end
-        
-        def debug(str = "")
-          puts str if $URCPU_DEBUG
         end
       end
     end

@@ -10,6 +10,13 @@ module UrCPU
         end
         
         def match(line)
+          debug "== Composite Token START == "
+          matches = match_without_debug(line)
+          debug "== Composite Token END == "
+          matches
+        end
+        
+        def match_without_debug(line)
           tokens.each do |token|
             if matches = token.match(line)
               return matches

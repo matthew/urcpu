@@ -1,3 +1,4 @@
+require 'urcpu/assembler/parser/debug'
 require 'urcpu/assembler/parser/token'
 require 'urcpu/assembler/parser/address_mode_token'
 require 'urcpu/assembler/parser/arithmetic_token'
@@ -31,20 +32,12 @@ module UrCPU
       
       def parse_line(line)
         LINE_TYPES.each do |line_type|
-          debug "TRYING LineType #{line_type.type}"
           if matches = line_type.match(line)
             return matches
           end
-          debug
         end
         
         nil
-      end
-      
-      private
-      
-      def debug(str = "")
-        puts str if $URCPU_DEBUG
       end
     end
   end

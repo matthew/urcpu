@@ -2,6 +2,8 @@ module UrCPU
   class Assembler
     class Parser
       class LineType
+        include Debug
+        
         attr_reader :type, :tokens
       
         def initialize(type, token_names)
@@ -10,6 +12,7 @@ module UrCPU
         end
         
         def match(line)
+          debug "TRYING LineType #{type}"
           line_to_parse = line.clone
           
           all_matches = tokens.inject([]) do |all_matches, token|
@@ -20,6 +23,7 @@ module UrCPU
             end
           end
           
+          debug
           line_to_parse.empty? ? all_matches : nil
         end
       end
