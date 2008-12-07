@@ -14,6 +14,10 @@ describe UrCPU::Assembler::Parser do
       it "parses INS IMM, REG" do
         p("movl $4, %eax").should == [:movl, 4, :eax]
       end
+      
+      it "parses INS -IMM, REG" do
+        p("movl $-4, %eax").should == [:movl, -4, :eax]
+      end
 
       it "parses INS REG, REG" do
         p("movl %eax, %edx").should == [:movl, :eax, :edx]

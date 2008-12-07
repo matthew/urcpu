@@ -3,12 +3,12 @@ module UrCPU
     class Parser
       class AddressModeToken < Token
         def initialize(name)
-          super(name, token_regex, &serializer)
+          super(name, regex)
         end
         
         private
         
-        def token_regex
+        def regex
           /(-?\d+)?        # optional offset, possibly negative
             \(             
               (%?)(\w+)    # label or register

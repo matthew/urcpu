@@ -1,34 +1,33 @@
 require 'urcpu/assembler/parser/token'
 require 'urcpu/assembler/parser/address_mode_token'
+require 'urcpu/assembler/parser/arithmetic_token'
+require 'urcpu/assembler/parser/composite_token'
 require 'urcpu/assembler/parser/line_type'
 
 module UrCPU
   class Assembler
     class Parser
+      OPERANDS = [
+        AddressModeToken.new(:adr),
+        ArithmeticToken.new(:arth),
+        Token.new(:reg, /%(\w+)/) { |reg| reg.to_sym },
+        Token.new(:imm, /\$(-?\d+(?:x\d+)?)/) { |imm| eval imm },        
+        Token.new(:label, /(\w+)/) { |lbl| lbl.to_sym },
+      ]
+      
       TOKENS = [
         Token.new(:ins, /(\w+)/) { |ins| ins.to_sym },
-        Token.new(:reg, /%(\w+)/) { |reg| reg.to_sym },
-        Token.new(:imm, /\$(\d+(?:x\d+)?)/) { |imm| eval imm },        
-        AddressModeToken.new(:adr),
-        Token.new(:label, /(\w+)/) { |lbl| lbl.to_sym },
         Token.new(:space, /\s+/),
         Token.new(:comma, /,\s*/),
         Token.new(:eol, /\s*$/),
         Token.new(:comment, /#.*$/),
-        Token.new(:arth, /\$(\d+(?:x\d+)?)\s*\+\s*(\d+)<<(\d+)/) { |imm, base, shift|
-          eval(imm) + (base.to_i << shift.to_i)
-        }
+        CompositeToken.new(:operand, OPERANDS)
       ]
       
       LINE_TYPES = [
-        LineType.new(:ins_imm_reg, [:ins, :space, :imm, :comma, :reg, :eol]),
-        LineType.new(:ins_reg_reg, [:ins, :space, :reg, :comma, :reg, :eol]),
-        LineType.new(:ins_adr_reg, [:ins, :space, :adr, :comma, :reg, :eol]),
-        LineType.new(:ins_reg_adr, [:ins, :space, :reg, :comma, :adr, :eol]),
-        LineType.new(:ins_arth_reg, [:ins, :space, :arth, :comma, :reg, :eol]),
-        LineType.new(:ins_label, [:ins, :space, :label, :eol]),
-        LineType.new(:ins_reg, [:ins, :space, :reg, :eol]),
-        LineType.new(:ins_imm, [:ins, :space, :imm, :eol]),
+        LineType.new(:ins2, [:ins, :space, :operand, :comma, :operand, :eol]),
+        LineType.new(:ins1, [:ins, :space, :operand, :eol]),
+        LineType.new(:ins0, [:ins, :eol]),
         LineType.new(:comment, [:comment]),
       ]
       

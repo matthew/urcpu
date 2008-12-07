@@ -11,9 +11,9 @@ module UrCPU
         end
       
         def match(line)
-          if match = line.match(regex)
+          if match = line.match(match_regex)
             debug "MATCH: token=#{name} match=#{match} captures=#{match.captures.inspect} line=#{line}"
-            line.gsub!(regex, "")
+            line.gsub!(match_regex, "")
             serialize match.captures
           else
             debug "NO MATCH: token=#{name} line=#{line}"
@@ -22,14 +22,16 @@ module UrCPU
         end
       
         private
+        
+        attr_reader :regex, :serializer
       
-        def regex
-          /^#{@regex}/
+        def match_regex
+          /^#{regex}/
         end
       
         def serialize(captures)
           Array(
-            @serializer ? @serializer.call(*captures) : nil
+            serializer ? serializer.call(*captures) : nil
           )
         end
         

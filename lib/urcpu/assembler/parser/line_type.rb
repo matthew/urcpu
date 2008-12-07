@@ -26,7 +26,7 @@ module UrCPU
         private
         
         def parser_tokens
-          UrCPU::Assembler::Parser::TOKENS
+          TOKENS + OPERANDS
         end
         
         def lookup_token(name)
