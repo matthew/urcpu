@@ -32,7 +32,7 @@ module UrCPU
       
       def parse_line(line)
         LINE_TYPES.each do |line_type|
-          if matches = line_type.match(line)
+          if matches = line_type.match(line.strip)
             return matches
           end
         end

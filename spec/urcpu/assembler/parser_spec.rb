@@ -9,6 +9,10 @@ describe UrCPU::Assembler::Parser do
     def p(line)
       @parser.parse_line(line)
     end
+    
+    it "strips whitespace before parsing" do
+      p("  movl $4, %eax   ").should == [:movl, 4, :eax]
+    end
 
     describe "instructions" do
       it "parses INS IMM, REG" do
