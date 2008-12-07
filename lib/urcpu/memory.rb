@@ -42,7 +42,7 @@ module UrCPU
     private 
 
     def in_bounds?(address, count)
-      range = Range.new(0, length, :do_not_include_end_point)
+      range = Range.new(0, length, :do_not_include_right_end_point)
       range.include?(address) && (
         (count == 0) || (
           (count > 0) &&

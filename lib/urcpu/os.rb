@@ -27,7 +27,7 @@ module UrCPU
       msg = ""
       msg_len.times do |n|
         byte = @cpu.memory[msg_ptr + n]
-        raise BusError, "sys_write over read" if byte.nil?
+        raise BusError, "sys_write read nil byte." if byte.nil?
         msg += byte.chr
       end
       
