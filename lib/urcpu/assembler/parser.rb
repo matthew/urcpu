@@ -7,6 +7,12 @@ require 'urcpu/assembler/parser/line_type'
 module UrCPU
   class Assembler
     class Parser
+      Token.register(:ins, /(\w+)/) { |ins| ins.to_sym }
+      Token.register(:space, /\s+/)
+      Token.register(:comma, /,\s*/)
+      Token.register(:eol, /\s*$/)
+      Token.register(:comment, /#.*$/)
+      
       OPERANDS = [
         AddressModeToken.register(:adr),
         ArithmeticToken.register(:arth),
@@ -14,15 +20,7 @@ module UrCPU
         Token.register(:imm, /\$(-?\d+(?:x\d+)?)/) { |imm| eval imm },        
         Token.register(:label, /(\w+)/) { |lbl| lbl.to_sym },
       ]
-      
-      TOKENS = [
-        Token.register(:ins, /(\w+)/) { |ins| ins.to_sym },
-        Token.register(:space, /\s+/),
-        Token.register(:comma, /,\s*/),
-        Token.register(:eol, /\s*$/),
-        Token.register(:comment, /#.*$/),
-        CompositeToken.register(:operand, OPERANDS)
-      ]
+      CompositeToken.register(:operand, OPERANDS)
       
       LINE_TYPES = [
         LineType.new(:ins2, [:ins, :space, :operand, :comma, :operand, :eol]),

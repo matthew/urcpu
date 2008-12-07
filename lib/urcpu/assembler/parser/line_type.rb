@@ -6,7 +6,7 @@ module UrCPU
       
         def initialize(type, token_names)
           @type = type
-          @tokens = token_names.map { |name| lookup_token(name) }
+          @tokens = token_names.map { |name| Token.lookup(name) }
         end
         
         def match(line)
@@ -21,20 +21,6 @@ module UrCPU
           end
           
           line_to_parse.empty? ? all_matches : nil
-        end
-
-        private
-        
-        def parser_tokens
-          TOKENS + OPERANDS
-        end
-        
-        def lookup_token(name)
-          if token = parser_tokens.find { |token| token.name == name }
-            token
-          else
-            raise UrCPU::ParseError, "Unknown token: #{name.inspect}"
-          end
         end
       end
     end
