@@ -1,9 +1,14 @@
 require 'urcpu/assembler/parser/debug'
+
 require 'urcpu/assembler/parser/token'
 require 'urcpu/assembler/parser/address_mode_token'
 require 'urcpu/assembler/parser/arithmetic_token'
 require 'urcpu/assembler/parser/composite_token'
+
 require 'urcpu/assembler/parser/line_type'
+
+require 'urcpu/assembler/parser/instruction_result'
+require 'urcpu/assembler/parser/label_result'
 
 module UrCPU
   class Assembler
