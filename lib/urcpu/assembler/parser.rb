@@ -7,6 +7,7 @@ require 'urcpu/assembler/parser/composite_token'
 
 require 'urcpu/assembler/parser/line_type'
 
+require 'urcpu/assembler/parser/comment_result'
 require 'urcpu/assembler/parser/instruction_result'
 require 'urcpu/assembler/parser/label_result'
 
@@ -16,6 +17,7 @@ module UrCPU
       Token.register(:ins, /(\w+)/) { |ins| ins.to_sym }
       Token.register(:space, /\s+/)
       Token.register(:comma, /,\s*/)
+      Token.register(:colon, /:/)
       Token.register(:eol, /\s*$/)
       Token.register(:comment, /#.*$/)
       
@@ -29,10 +31,12 @@ module UrCPU
       CompositeToken.register(:operand, OPERANDS)
       
       LINE_TYPES = [
-        LineType.new(:ins2, [:ins, :space, :operand, :comma, :operand, :eol]),
-        LineType.new(:ins1, [:ins, :space, :operand, :eol]),
-        LineType.new(:ins0, [:ins, :eol]),
-        LineType.new(:comment, [:comment]),
+        LineType.new(InstructionResult, 
+          [:ins, :space, :operand, :comma, :operand, :eol]),
+        LineType.new(InstructionResult, [:ins, :space, :operand, :eol]),
+        LineType.new(InstructionResult, [:ins, :eol]),
+        LineType.new(LabelResult, [:label, :colon, :eol]),
+        LineType.new(CommentResult, [:comment]),
       ]
       
       def parse_line(line)

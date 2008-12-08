@@ -4,15 +4,15 @@ module UrCPU
       class LineType
         include Debug
         
-        attr_reader :type, :tokens
+        attr_reader :result_klass, :tokens
       
-        def initialize(type, token_names)
-          @type = type
+        def initialize(result_klass, token_names)
+          @result_klass = result_klass
           @tokens = token_names.map { |name| Token.lookup(name) }
         end
         
         def match(line)
-          debug "TRYING LineType #{type}"
+          debug "TRYING LineType result_klass=#{result_klass}"
           line_to_parse = line.clone
           
           all_matches = tokens.inject([]) do |all_matches, token|
@@ -24,7 +24,7 @@ module UrCPU
           end
           
           debug
-          line_to_parse.empty? ? all_matches : nil
+          line_to_parse.empty? ? result_klass.new(all_matches) : nil
         end
       end
     end

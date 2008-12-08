@@ -2,20 +2,23 @@ require File.expand_path(File.dirname(__FILE__) + "/../../../spec_helper")
 
 describe UrCPU::Assembler::Parser::LineType do
   before do
+    @result_klass = UrCPU::Assembler::Parser::InstructionResult
     @parser_klass = UrCPU::Assembler::Parser
   end
   
   describe "#initialize" do
     it "raises a parse error if an unknown token is given" do
       lambda do
-        @parser_klass::LineType.new(:foo, [:unknown_token])
+        @parser_klass::LineType.new(@result_klass, [:unknown_token])
       end.should raise_error(UrCPU::ParseError)
     end
   end
   
   describe "#match" do
     before do
-      @line_type = @parser_klass::LineType.new(:ins_reg, [:ins, :space, :reg])
+      @line_type = @parser_klass::LineType.new(
+        @result_klass, [:ins, :space, :reg]
+      )
     end
     
     describe "successful" do
@@ -30,7 +33,8 @@ describe UrCPU::Assembler::Parser::LineType do
       end
       
       it "returns the matched content" do
-        @line_type.match("mov %eax").should == [:mov, :eax]
+        result = @result_klass.new([:mov, :eax])
+        @line_type.match("mov %eax").should == result
       end
     end
 
