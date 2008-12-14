@@ -1,6 +1,7 @@
 require 'urcpu/assembler/parser/debug'
 
 require 'urcpu/assembler/parser/token'
+require 'urcpu/assembler/parser/immediate_token'
 require 'urcpu/assembler/parser/address_mode_token'
 require 'urcpu/assembler/parser/arithmetic_token'
 require 'urcpu/assembler/parser/composite_token'
@@ -25,7 +26,7 @@ module UrCPU
         AddressModeToken.register(:adr),
         ArithmeticToken.register(:arth),
         Token.register(:reg, /%(\w+)/) { |reg| reg.to_sym },
-        Token.register(:imm, /\$(-?\d+(?:x\d+)?)/) { |imm| eval imm },        
+        ImmediateToken.register(:imm),
         Token.register(:label, /(\w+)/) { |lbl| lbl.to_sym },
       ]
       CompositeToken.register(:operand, OPERANDS)

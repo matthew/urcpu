@@ -22,6 +22,7 @@ describe UrCPU::Assembler::Parser do
     describe "instructions" do
       it "parses INS IMM, REG" do
         p("movl $4, %eax").should == ins([:movl, 4, :eax])
+        p("movl $foo, %eax").should == ins([:movl, :foo, :eax])
       end
       
       it "parses INS -IMM, REG" do
