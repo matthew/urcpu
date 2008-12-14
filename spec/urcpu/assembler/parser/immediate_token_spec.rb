@@ -48,9 +48,10 @@ describe UrCPU::Assembler::Parser::ImmediateToken do
       @token.match("$______").should == [:______]
     end
 
-    it "should match illegal base 16 numbers as labels" do
+    it "should match illegal numbers as labels" do
       @token.match("$97x97").should == [:"97x97"]
       @token.match("$0xZZZ").should == [:"0xZZZ"]
+      @token.match("$5555X").should == [:"5555X"]
     end
 
     it "should not match a 'negative' label" do

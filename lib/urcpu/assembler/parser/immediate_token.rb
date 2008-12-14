@@ -10,7 +10,7 @@ module UrCPU
         
         def regex
           /
-            \$                    # Immediates start with a $
+            \$                      # Immediates start with a $
             (?:
                 (-?                 # Immediate can be negative
                   (?:
