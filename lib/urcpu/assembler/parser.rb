@@ -31,11 +31,18 @@ module UrCPU
           LineParser.new(Result::Label, [:label, :colon, :eol]),
           LineParser.new(Result::Comment, [:comment]),
           LineParser.new(Result::String, [:dot, :ascii, :space, :string, :eol]),
+          LineParser.new(Result::Long, [
+            :dot, :long, :space, :long_value, :eol
+          ]),
         ]
       end
       
       def register_tokens!
         Token.register(:ins, /(\w+)/) { |ins| ins.to_sym }
+        Token.register(:reg, /%(\w+)/) { |reg| reg.to_sym }
+        Token.register(:label, /(\w+)/) { |lbl| lbl.to_sym }
+        Token.register(:digit, /(-?\d+)/) { |digit| digit.to_i }
+        Token.register(:hexdigit, /(-?0x[\da-fA-F]+)/) { |hex| eval hex }
         Token.register(:space, /\s+/)
         Token.register(:comma, /,\s*/)
         Token.register(:colon, /:/)
@@ -43,18 +50,27 @@ module UrCPU
         Token.register(:comment, /#.*$/)
         Token.register(:dot, /\./)
         Token.register(:ascii, /ascii/)
+        Token.register(:long, /long/)
+        
+        Token::AddressMode.register(:adr)
+        Token::Arithmetic.register(:arth)
+        Token::Immediate.register(:imm)
         Token::String.register(:string)
-        Token::Composite.register(:operand, operands)
-      end
-      
-      def operands
-        @operands ||= [
-          Token::AddressMode.register(:adr),
-          Token::Arithmetic.register(:arth),
-          Token.register(:reg, /%(\w+)/) { |reg| reg.to_sym },
-          Token::Immediate.register(:imm),
-          Token.register(:label, /(\w+)/) { |lbl| lbl.to_sym },
-        ]
+        
+        Token::Composite.register(:operand, [
+          Token.lookup(:adr),
+          Token.lookup(:arth),
+          Token.lookup(:reg),
+          Token.lookup(:imm),
+          Token.lookup(:label)
+        ])
+        
+        Token::Composite.register(:long_value, [
+          Token.lookup(:arth),
+          Token.lookup(:hexdigit),
+          Token.lookup(:digit),
+          Token.lookup(:label),
+        ])
       end
     end
   end

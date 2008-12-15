@@ -130,6 +130,37 @@ describe UrCPU::Assembler::Parser do
             @string_result.new(['I "like" cows'])
         end
       end
+      
+      describe ".long" do
+        before do
+          @long_result = UrCPU::Assembler::Parser::Result::Long
+        end
+        
+        it "can parse a .long with an integer" do
+          p('.long 97').should == @long_result.new([97])
+          p('.long -97').should == @long_result.new([-97])
+        end
+
+        it "can parse a .long with a hexidecimal number" do
+          p('.long 0xFA').should == @long_result.new([0xFA])
+          p('.long 0xcb').should == @long_result.new([0xcb])
+          p('.long 0xaF').should == @long_result.new([0xaF])
+          p('.long 0x97').should == @long_result.new([0x97])
+          p('.long 0x7F').should == @long_result.new([0x7F])
+          p('.long -0x97').should == @long_result.new([-0x97])
+          p('.long 0x123456789ABCDEF').should == @long_result.new([0x123456789ABCDEF])
+        end
+        
+        it "can parse a .long with a label" do
+          p('.long _cows').should == @long_result.new([:_cows])
+          p('.long some_label').should == @long_result.new([:some_label])
+          p('.long _________').should == @long_result.new([:_________])
+        end
+
+        it "can parse a .long with an arithmetic expression" do
+          p('.long 2 + 113<<2').should == @long_result.new([2 + (113<<2)])
+        end
+      end
     end
   
     describe "comment" do
