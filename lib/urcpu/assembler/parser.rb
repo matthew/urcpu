@@ -30,7 +30,7 @@ module UrCPU
           LineParser.new(Result::Instruction, [:ins, :eol]),
           LineParser.new(Result::Label, [:label, :colon, :eol]),
           LineParser.new(Result::Comment, [:comment]),
-          LineParser.new(Result::String, [:dot, :ascii, :string, :eol]),
+          LineParser.new(Result::String, [:dot, :ascii, :space, :string, :eol]),
         ]
       end
       

@@ -115,6 +115,21 @@ describe UrCPU::Assembler::Parser do
     end
   
     describe "data" do
+      describe ".ascii" do
+        before do
+          @string_result = UrCPU::Assembler::Parser::Result::String
+        end
+        
+        it "can parse a basic string" do
+          p('.ascii "cows are good"').should == \
+            @string_result.new(["cows are good"])
+        end
+
+        it "can parse a string with escaped quotes" do
+          p('.ascii "I \"like\" cows"').should == \
+            @string_result.new(['I "like" cows'])
+        end
+      end
     end
   
     describe "comment" do
