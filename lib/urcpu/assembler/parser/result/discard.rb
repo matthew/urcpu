@@ -2,12 +2,12 @@ module UrCPU
   class Assembler
     class Parser
       module Result
-        class Comment
+        class Discard
           def initialize(_)
           end
         
           def ==(other)
-            other.kind_of? Comment
+            other.kind_of? Discard
           end
         end
       end

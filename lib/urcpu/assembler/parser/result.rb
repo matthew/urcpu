@@ -1,4 +1,4 @@
-require "urcpu/assembler/parser/result/comment"
+require "urcpu/assembler/parser/result/discard"
 require "urcpu/assembler/parser/result/instruction"
 require "urcpu/assembler/parser/result/abstract_value"
 require "urcpu/assembler/parser/result/label"

@@ -193,12 +193,32 @@ describe UrCPU::Assembler::Parser do
             p('.text').should == @section_result.new([:text])
           end
         end
+
+        describe ".type" do
+          before do
+            @comment_result = UrCPU::Assembler::Parser::Result::Discard
+          end
+          
+          it "discards these types" do
+            p('.type _foobar, @function').should == @comment_result.new([""])
+          end
+        end
+
+        describe ".size" do
+          before do
+            @comment_result = UrCPU::Assembler::Parser::Result::Discard
+          end
+          
+          it "discards these types" do
+            p('.size _foobar, .-_foobar').should == @comment_result.new([""])
+          end
+        end
       end
     end
   
     describe "comment" do
       it "parses a comment" do
-        @comment_result_klass = UrCPU::Assembler::Parser::Result::Comment
+        @comment_result_klass = UrCPU::Assembler::Parser::Result::Discard
         p("# I am a comment").should == @comment_result_klass.new([])
       end
     end

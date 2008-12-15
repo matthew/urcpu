@@ -29,13 +29,15 @@ module UrCPU
           LineParser.new(Result::Instruction, [:ins, :space, :operand, :eol]),
           LineParser.new(Result::Instruction, [:ins, :eol]),
           LineParser.new(Result::Label, [:label, :colon, :eol]),
-          LineParser.new(Result::Comment, [:comment]),
+          LineParser.new(Result::Discard, [:hash, :rest_of_line]),
           LineParser.new(Result::String, [:dot, :ascii, :space, :string, :eol]),
           LineParser.new(Result::Long, [:dot, :long, :space, :long_value, :eol]),
           LineParser.new(Result::Align, [:dot, :align, :space, :digit, :eol]),
           LineParser.new(Result::Section, 
             [:dot, :section, :space, :dot, :section_name, :eol]),
-          LineParser.new(Result::Section, [:dot, :text, :eol])
+          LineParser.new(Result::Section, [:dot, :text, :eol]),
+          LineParser.new(Result::Discard, [:dot, :type, :rest_of_line]),
+          LineParser.new(Result::Discard, [:dot, :size, :rest_of_line])
         ]
       end
       
@@ -52,12 +54,15 @@ module UrCPU
         Token.register(:comma, /,\s*/)
         Token.register(:colon, /:/)
         Token.register(:eol, /\s*$/)
-        Token.register(:comment, /#.*$/)
+        Token.register(:hash, /#/)
+        Token.register(:rest_of_line, /.*$/)
         Token.register(:dot, /\./)
         Token.register(:ascii, /ascii/)
         Token.register(:long, /long/)
         Token.register(:align, /align/)
         Token.register(:section, /section/)
+        Token.register(:type, /type/)
+        Token.register(:size, /size/)
         
         Token::AddressMode.register(:adr)
         Token::Arithmetic.register(:arth)
