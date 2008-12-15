@@ -4,6 +4,7 @@ describe UrCPU::Assembler::Parser::LineParser do
   before do
     @result_klass = UrCPU::Assembler::Parser::Result::Instruction
     @parser_klass = UrCPU::Assembler::Parser
+    @parser_klass.new
   end
   
   describe "#initialize" do
