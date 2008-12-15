@@ -37,6 +37,10 @@ describe UrCPU::Assembler::Parser do
         p("call ensure_string").should == ins([:call, :ensure_string])
       end
 
+      it "parses CALL ABSOLUTE" do
+        p("call *%eax").should == ins([:call, :eax])
+      end
+
       it "parses PUSH REG" do
         p("push %ebx").should == ins([:push, :ebx])
       end

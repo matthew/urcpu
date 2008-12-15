@@ -42,9 +42,12 @@ module UrCPU
       def register_tokens!
         Token.register(:ins, /(\w+)/) { |ins| ins.to_sym }
         Token.register(:reg, /%(\w+)/) { |reg| reg.to_sym }
+        Token.register(:absolute, /\*%(\w+)/) { |reg| reg.to_sym }
         Token.register(:label, /(\w+)/) { |lbl| lbl.to_sym }
         Token.register(:digit, /(-?\d+)/) { |digit| digit.to_i }
+        Token.register(:text, /(text)/) { |text| text.to_sym }
         Token.register(:hexdigit, /(-?0x[\da-fA-F]+)/) { |hex| eval hex }
+        Token.register(:section_name, /(rodata|bss|data)/) { |sec| sec.to_sym }
         Token.register(:space, /\s+/)
         Token.register(:comma, /,\s*/)
         Token.register(:colon, /:/)
@@ -55,8 +58,6 @@ module UrCPU
         Token.register(:long, /long/)
         Token.register(:align, /align/)
         Token.register(:section, /section/)
-        Token.register(:text, /(text)/) { |text| text.to_sym }
-        Token.register(:section_name, /(rodata|bss|data)/) { |sec| sec.to_sym }
         
         Token::AddressMode.register(:adr)
         Token::Arithmetic.register(:arth)
@@ -67,6 +68,7 @@ module UrCPU
           Token.lookup(:adr),
           Token.lookup(:arth),
           Token.lookup(:reg),
+          Token.lookup(:absolute),
           Token.lookup(:imm),
           Token.lookup(:label)
         ])
