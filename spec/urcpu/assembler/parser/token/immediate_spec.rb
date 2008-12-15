@@ -1,9 +1,9 @@
-require File.expand_path(File.dirname(__FILE__) + "/../../../spec_helper")
+require File.expand_path(File.dirname(__FILE__) + "/../../../../spec_helper")
 
-describe UrCPU::Assembler::Parser::ImmediateToken do
+describe UrCPU::Assembler::Parser::Token::Immediate do
   describe "#match" do
     before do
-      @token = UrCPU::Assembler::Parser::ImmediateToken.new(:imm)
+      @token = UrCPU::Assembler::Parser::Token::Immediate.new(:imm)
     end
     
     it "should match a positive base 10 number" do

@@ -1,18 +1,18 @@
-require File.expand_path(File.dirname(__FILE__) + "/../../../spec_helper")
+require File.expand_path(File.dirname(__FILE__) + "/../../../../spec_helper")
 
-describe UrCPU::Assembler::Parser::Token do
+describe UrCPU::Assembler::Parser::Token::Base do
   describe "class methods" do
     describe "#register and #lookup" do
       it "can register something and look it up" do
-        UrCPU::Assembler::Parser::Token.register(:foo, /foo/)
-        token = UrCPU::Assembler::Parser::Token.lookup(:foo)
+        UrCPU::Assembler::Parser::Token::Base.register(:foo, /foo/)
+        token = UrCPU::Assembler::Parser::Token::Base.lookup(:foo)
         token.name.should == :foo
-        token.should be_kind_of(UrCPU::Assembler::Parser::Token)
+        token.should be_kind_of(UrCPU::Assembler::Parser::Token::Base)
       end
       
       it "looking up an unknown token raises an error" do
         lambda do
-          UrCPU::Assembler::Parser::Token.lookup(:unknown)
+          UrCPU::Assembler::Parser::Token::Base.lookup(:unknown)
         end.should raise_error(UrCPU::ParseError)
       end
     end
@@ -20,8 +20,8 @@ describe UrCPU::Assembler::Parser::Token do
     describe "#save and #lookup" do
       it "can register something and look it up" do
         foo = mock!.name { :foo }.subject
-        UrCPU::Assembler::Parser::Token.save(foo)
-        token = UrCPU::Assembler::Parser::Token.lookup(:foo)
+        UrCPU::Assembler::Parser::Token::Base.save(foo)
+        token = UrCPU::Assembler::Parser::Token::Base.lookup(:foo)
         token.should be_eql(foo)
       end
     end
@@ -31,7 +31,7 @@ describe UrCPU::Assembler::Parser::Token do
     before do
       @name = :tok
       @regex = /foo_(\d+)_bar/
-      @token = UrCPU::Assembler::Parser::Token.new(@name, @regex) do |digit|
+      @token = UrCPU::Assembler::Parser::Token::Base.new(@name, @regex) do |digit|
         2 * digit.to_i
       end
     end
@@ -52,7 +52,7 @@ describe UrCPU::Assembler::Parser::Token do
       
       describe "no conversion block given" do
         before do
-          @token = UrCPU::Assembler::Parser::Token.new(@name, @regex)
+          @token = UrCPU::Assembler::Parser::Token::Base.new(@name, @regex)
         end
         
         it "consumes the line" do

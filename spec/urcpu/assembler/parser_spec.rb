@@ -3,7 +3,7 @@ require File.expand_path(File.dirname(__FILE__) + "/../../spec_helper")
 describe UrCPU::Assembler::Parser do
   before do
     @parser = UrCPU::Assembler::Parser.new
-    @ins_result_klass = UrCPU::Assembler::Parser::InstructionResult
+    @ins_result_klass = UrCPU::Assembler::Parser::Result::Instruction
   end
   
   describe "#parse_line" do
@@ -109,7 +109,7 @@ describe UrCPU::Assembler::Parser do
   
     describe "labels" do
       it "parses a label" do
-        @label_result_klass = UrCPU::Assembler::Parser::LabelResult
+        @label_result_klass = UrCPU::Assembler::Parser::Result::Label
         p("report_error:").should == @label_result_klass.new([:report_error])
       end
     end
@@ -119,7 +119,7 @@ describe UrCPU::Assembler::Parser do
   
     describe "comment" do
       it "parses a comment" do
-        @comment_result_klass = UrCPU::Assembler::Parser::CommentResult
+        @comment_result_klass = UrCPU::Assembler::Parser::Result::Comment
         p("# I am a comment").should == @comment_result_klass.new([])
       end
     end

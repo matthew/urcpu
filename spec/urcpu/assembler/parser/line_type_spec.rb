@@ -2,7 +2,7 @@ require File.expand_path(File.dirname(__FILE__) + "/../../../spec_helper")
 
 describe UrCPU::Assembler::Parser::LineType do
   before do
-    @result_klass = UrCPU::Assembler::Parser::InstructionResult
+    @result_klass = UrCPU::Assembler::Parser::Result::Instruction
     @parser_klass = UrCPU::Assembler::Parser
   end
   

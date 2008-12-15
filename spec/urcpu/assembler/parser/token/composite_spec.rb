@@ -1,10 +1,10 @@
-require File.expand_path(File.dirname(__FILE__) + "/../../../spec_helper")
+require File.expand_path(File.dirname(__FILE__) + "/../../../../spec_helper")
 
-describe UrCPU::Assembler::Parser::CompositeToken do
+describe UrCPU::Assembler::Parser::Token::Composite do
   before do
-    @foo_token = UrCPU::Assembler::Parser::Token.new(:foo, /foo/) { "foo" }
-    @bar_token = UrCPU::Assembler::Parser::Token.new(:bar, /bar/) { "bar" }
-    @token = UrCPU::Assembler::Parser::CompositeToken.new(
+    @foo_token = UrCPU::Assembler::Parser::Token::Base.new(:foo, /foo/) { "foo" }
+    @bar_token = UrCPU::Assembler::Parser::Token::Base.new(:bar, /bar/) { "bar" }
+    @token = UrCPU::Assembler::Parser::Token::Composite.new(
       :foo_and_bar,
       [@foo_token, @bar_token]
     )

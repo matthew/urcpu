@@ -1,9 +1,9 @@
-require File.expand_path(File.dirname(__FILE__) + "/../../../spec_helper")
+require File.expand_path(File.dirname(__FILE__) + "/../../../../spec_helper")
 
-describe UrCPU::Assembler::Parser::ArithmeticToken do
+describe UrCPU::Assembler::Parser::Token::Arithmetic do
   describe "#match" do
     before do
-      @token = UrCPU::Assembler::Parser::ArithmeticToken.new(:arithmetic)
+      @token = UrCPU::Assembler::Parser::Token::Arithmetic.new(:arithmetic)
     end
     
     it "matches IMM/NUM + IMM/NUM<<NUM" do

@@ -1,8 +1,8 @@
-require File.expand_path(File.dirname(__FILE__) + "/../../../spec_helper")
+require File.expand_path(File.dirname(__FILE__) + "/../../../../spec_helper")
 
-describe UrCPU::Assembler::Parser::InstructionResult do
+describe UrCPU::Assembler::Parser::Result::Instruction do
   before do
-    @klass = UrCPU::Assembler::Parser::InstructionResult 
+    @klass = UrCPU::Assembler::Parser::Result::Instruction 
     @ins2 = @klass.new([:mov, 97, :eax])
     @ins1 = @klass.new([:push, 5])
     @ins0 = @klass.new([:ret])

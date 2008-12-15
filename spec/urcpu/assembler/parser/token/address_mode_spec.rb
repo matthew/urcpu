@@ -1,8 +1,8 @@
-require File.expand_path(File.dirname(__FILE__) + "/../../../spec_helper")
+require File.expand_path(File.dirname(__FILE__) + "/../../../../spec_helper")
 
-describe UrCPU::Assembler::Parser::AddressModeToken do
+describe UrCPU::Assembler::Parser::Token::AddressMode do
   before do
-    @token = UrCPU::Assembler::Parser::AddressModeToken.new(:adr)
+    @token = UrCPU::Assembler::Parser::Token::AddressMode.new(:adr)
     @default = { :offset => 0, :index => 0, :index_type => :immediate, :scale => 0 }
     @reg = :eax
     @label = :main

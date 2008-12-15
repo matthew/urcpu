@@ -1,16 +1,7 @@
 require 'urcpu/assembler/parser/debug'
-
 require 'urcpu/assembler/parser/token'
-require 'urcpu/assembler/parser/immediate_token'
-require 'urcpu/assembler/parser/address_mode_token'
-require 'urcpu/assembler/parser/arithmetic_token'
-require 'urcpu/assembler/parser/composite_token'
-
 require 'urcpu/assembler/parser/line_type'
-
-require 'urcpu/assembler/parser/comment_result'
-require 'urcpu/assembler/parser/instruction_result'
-require 'urcpu/assembler/parser/label_result'
+require 'urcpu/assembler/parser/result'
 
 module UrCPU
   class Assembler
@@ -23,21 +14,21 @@ module UrCPU
       Token.register(:comment, /#.*$/)
       
       OPERANDS = [
-        AddressModeToken.register(:adr),
-        ArithmeticToken.register(:arth),
+        Token::AddressMode.register(:adr),
+        Token::Arithmetic.register(:arth),
         Token.register(:reg, /%(\w+)/) { |reg| reg.to_sym },
-        ImmediateToken.register(:imm),
+        Token::Immediate.register(:imm),
         Token.register(:label, /(\w+)/) { |lbl| lbl.to_sym },
       ]
-      CompositeToken.register(:operand, OPERANDS)
+      Token::Composite.register(:operand, OPERANDS)
       
       LINE_TYPES = [
-        LineType.new(InstructionResult, 
+        LineType.new(Result::Instruction, 
           [:ins, :space, :operand, :comma, :operand, :eol]),
-        LineType.new(InstructionResult, [:ins, :space, :operand, :eol]),
-        LineType.new(InstructionResult, [:ins, :eol]),
-        LineType.new(LabelResult, [:label, :colon, :eol]),
-        LineType.new(CommentResult, [:comment]),
+        LineType.new(Result::Instruction, [:ins, :space, :operand, :eol]),
+        LineType.new(Result::Instruction, [:ins, :eol]),
+        LineType.new(Result::Label, [:label, :colon, :eol]),
+        LineType.new(Result::Comment, [:comment]),
       ]
       
       def parse_line(line)

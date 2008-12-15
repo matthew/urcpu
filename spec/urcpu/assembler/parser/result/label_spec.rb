@@ -1,8 +1,8 @@
-require File.expand_path(File.dirname(__FILE__) + "/../../../spec_helper")
+require File.expand_path(File.dirname(__FILE__) + "/../../../../spec_helper")
 
-describe UrCPU::Assembler::Parser::LabelResult do
+describe UrCPU::Assembler::Parser::Result::Label do
   before do
-    @result = UrCPU::Assembler::Parser::LabelResult.new([:some_label])
+    @result = UrCPU::Assembler::Parser::Result::Label.new([:some_label])
   end
   
   describe "#label" do
@@ -13,8 +13,8 @@ describe UrCPU::Assembler::Parser::LabelResult do
   
   describe "#==" do
     before do
-      @same = UrCPU::Assembler::Parser::LabelResult.new([:some_label])
-      @not_same = UrCPU::Assembler::Parser::LabelResult.new([:different])
+      @same = UrCPU::Assembler::Parser::Result::Label.new([:some_label])
+      @not_same = UrCPU::Assembler::Parser::Result::Label.new([:different])
     end
     
     it "is equal to itself" do

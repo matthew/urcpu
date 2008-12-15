@@ -1,9 +1,9 @@
-require File.expand_path(File.dirname(__FILE__) + "/../../../spec_helper")
+require File.expand_path(File.dirname(__FILE__) + "/../../../../spec_helper")
 
-describe UrCPU::Assembler::Parser::CommentResult do
+describe UrCPU::Assembler::Parser::Result::Comment do
   describe "#==" do
     it "thinks all comments are the same" do
-      klass = UrCPU::Assembler::Parser::CommentResult
+      klass = UrCPU::Assembler::Parser::Result::Comment
       comment1 = klass.new([])
       comment2 = klass.new(nil)
       comment1.should_not be_eql(comment2)
@@ -11,7 +11,7 @@ describe UrCPU::Assembler::Parser::CommentResult do
     end
 
     it "doesn't equate a comment to a non-comment" do
-      klass = UrCPU::Assembler::Parser::CommentResult
+      klass = UrCPU::Assembler::Parser::Result::Comment
       comment = klass.new([])
       comment.should_not == Object.new
     end
