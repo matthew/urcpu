@@ -31,9 +31,10 @@ module UrCPU
           LineParser.new(Result::Label, [:label, :colon, :eol]),
           LineParser.new(Result::Comment, [:comment]),
           LineParser.new(Result::String, [:dot, :ascii, :space, :string, :eol]),
-          LineParser.new(Result::Long, [
-            :dot, :long, :space, :long_value, :eol
-          ]),
+          LineParser.new(Result::Long, [:dot, :long, :space, :long_value, :eol]),
+          LineParser.new(Result::Align, [:dot, :align, :space, :digit, :eol]),
+          LineParser.new(Result::Section, 
+            [:dot, :section, :space, :dot, :section_name])
         ]
       end
       
@@ -51,6 +52,9 @@ module UrCPU
         Token.register(:dot, /\./)
         Token.register(:ascii, /ascii/)
         Token.register(:long, /long/)
+        Token.register(:align, /align/)
+        Token.register(:section, /section/)
+        Token.register(:section_name, /(rodata|bss|data)/) { |sec| sec.to_sym }
         
         Token::AddressMode.register(:adr)
         Token::Arithmetic.register(:arth)

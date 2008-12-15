@@ -161,6 +161,28 @@ describe UrCPU::Assembler::Parser do
           p('.long 2 + 113<<2').should == @long_result.new([2 + (113<<2)])
         end
       end
+      
+      describe ".align" do
+        before do
+          @align_result = UrCPU::Assembler::Parser::Result::Align
+        end
+        
+        it "parses .align INT" do
+          p('.align 4').should == @align_result.new([4])
+        end
+      end
+
+      describe ".section" do
+        before do
+          @section_result = UrCPU::Assembler::Parser::Result::Section
+        end
+        
+        it "parses correct" do
+          p('.section .data').should == @section_result.new([:data])
+          p('.section .bss').should == @section_result.new([:bss])
+          p('.section .rodata').should == @section_result.new([:rodata])
+        end
+      end
     end
   
     describe "comment" do
