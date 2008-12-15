@@ -10,10 +10,24 @@ module UrCPU
         register_tokens!
       end
       
+      def parse_file(file)
+        results = Array.new
+        
+        File.open(file, "r").readlines.each_with_index do |line, num|
+          if result = parse_line(line)
+            results << result
+          else
+            raise UrCPU::ParseError, "Parse Error #{file}:#{num+1} #{line}"
+          end
+        end
+        
+        results
+      end
+      
       def parse_line(line)
         line_parsers.each do |line_type|
-          if matches = line_type.match(line.strip)
-            return matches
+          if result = line_type.match(line.strip)
+            return result
           end
         end
         

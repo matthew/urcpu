@@ -6,6 +6,39 @@ describe UrCPU::Assembler::Parser do
     @ins_result_klass = UrCPU::Assembler::Parser::Result::Instruction
   end
   
+  describe "#parse_file" do
+    before do
+      @expected_lines = [
+        "start:             \n",
+        "   mov 5, %eax     \n",
+        "   mov 7, %ebx     \n",
+        "   add %eax, %ebx  \n"
+      ]
+
+      mock(File).open(@file = "some_file", "r").stub!.readlines do
+        @expected_lines
+      end
+    end
+    
+    it "parses a file a line at a time and calles parse_line on them" do
+      results = [:x, :y, :z, :w]
+      @expected_lines.each do |line|
+        mock(@parser).parse_line(line) { results.shift }
+      end
+      
+      @parser.parse_file(@file).should == [:x, :y, :z, :w]
+    end
+    
+    it "rasies a parse error if some line can not be parsed" do
+      mock(@parser).parse_line(@expected_lines[0]) { :x }
+      mock(@parser).parse_line(@expected_lines[1]) { :y }
+      mock(@parser).parse_line(@expected_lines[2]) { nil }
+      lambda do 
+        @parser.parse_file(@file) 
+      end.should raise_error(UrCPU::ParseError)
+    end
+  end
+  
   describe "#parse_line" do
     def p(line)
       @parser.parse_line(line)
