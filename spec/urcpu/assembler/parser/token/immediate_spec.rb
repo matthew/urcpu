@@ -18,6 +18,12 @@ describe UrCPU::Assembler::Parser::Token::Immediate do
       @token.match("$-99999999999999999999").should == [-99999999999999999999]
     end
 
+    it "should match a bitwise negated number" do
+      @token.match("$~0").should == [~0]
+      @token.match("$~2").should == [~2]
+      @token.match("$~99999999999999999999").should == [~99999999999999999999]
+    end
+
     it "should match a positive base 16 number" do
       @token.match("$0x0").should == [0]
       @token.match("$0xA").should == [0xA]
@@ -56,6 +62,13 @@ describe UrCPU::Assembler::Parser::Token::Immediate do
 
     it "should not match a 'negative' label" do
       @token.match("$-foo").should be_nil
+    end
+    
+    it "should match a character" do
+      %w{A B C X Y Z a b c x y z}.each do |char|
+        ascii_code = "#{char}"[0]
+        @token.match("$'#{char}").should == [ascii_code]
+      end
     end
   end
 end
