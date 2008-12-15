@@ -38,9 +38,11 @@ module UrCPU
           end
       
           def serialize(captures)
-            Array(
-              serializer ? serializer.call(*captures) : nil
-            )
+            coerce_array(serializer ? serializer.call(*captures) : nil)
+          end
+          
+          def coerce_array(value)
+            (value == "") ? [""] : Array(value)
           end
         end
       end

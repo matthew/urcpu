@@ -1,4 +1,5 @@
 require "urcpu/assembler/parser/token/base"
+require "urcpu/assembler/parser/token/string"
 require "urcpu/assembler/parser/token/immediate"
 require "urcpu/assembler/parser/token/arithmetic"
 require "urcpu/assembler/parser/token/address_mode"

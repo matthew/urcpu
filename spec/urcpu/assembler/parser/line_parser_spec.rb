@@ -1,6 +1,6 @@
 require File.expand_path(File.dirname(__FILE__) + "/../../../spec_helper")
 
-describe UrCPU::Assembler::Parser::LineType do
+describe UrCPU::Assembler::Parser::LineParser do
   before do
     @result_klass = UrCPU::Assembler::Parser::Result::Instruction
     @parser_klass = UrCPU::Assembler::Parser
@@ -9,14 +9,14 @@ describe UrCPU::Assembler::Parser::LineType do
   describe "#initialize" do
     it "raises a parse error if an unknown token is given" do
       lambda do
-        @parser_klass::LineType.new(@result_klass, [:unknown_token])
+        @parser_klass::LineParser.new(@result_klass, [:unknown_token])
       end.should raise_error(UrCPU::ParseError)
     end
   end
   
   describe "#match" do
     before do
-      @line_type = @parser_klass::LineType.new(
+      @line_type = @parser_klass::LineParser.new(
         @result_klass, [:ins, :space, :reg]
       )
     end
@@ -66,7 +66,7 @@ describe UrCPU::Assembler::Parser::LineType do
       describe "some inner token fails but whole line consumed" do
         before do
           @tokens = [:ins, :space, :label, :space, :reg, :eol]
-          @line_type = @parser_klass::LineType.new(:ins_reg, @tokens)
+          @line_type = @parser_klass::LineParser.new(:ins_reg, @tokens)
           @line = "jmp label"
         end
 
