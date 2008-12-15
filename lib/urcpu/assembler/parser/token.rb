@@ -9,8 +9,26 @@ module UrCPU
     class Parser
       module Token
         class << self
-          def method_missing(method, *args, &block)
-            Base.send(method, *args, &block)
+          def register(*args, &block)
+            Base.register(*args, &block)
+          end
+          
+          def lookup(name)
+            if token = registry[name]
+              token
+            else
+              raise UrCPU::ParseError, "Unknown token: #{name.inspect}"
+            end
+          end
+          
+          def save(token)
+            registry[token.name] = token
+          end
+          
+          private
+          
+          def registry
+            @registry ||= Hash.new
           end
         end
       end

@@ -2,27 +2,12 @@ require File.expand_path(File.dirname(__FILE__) + "/../../../../spec_helper")
 
 describe UrCPU::Assembler::Parser::Token::Base do
   describe "class methods" do
-    describe "#register and #lookup" do
+    describe "#register" do
       it "can register something and look it up" do
         UrCPU::Assembler::Parser::Token::Base.register(:foo, /foo/)
-        token = UrCPU::Assembler::Parser::Token::Base.lookup(:foo)
+        token = UrCPU::Assembler::Parser::Token.lookup(:foo)
         token.name.should == :foo
         token.should be_kind_of(UrCPU::Assembler::Parser::Token::Base)
-      end
-      
-      it "looking up an unknown token raises an error" do
-        lambda do
-          UrCPU::Assembler::Parser::Token::Base.lookup(:unknown)
-        end.should raise_error(UrCPU::ParseError)
-      end
-    end
-    
-    describe "#save and #lookup" do
-      it "can register something and look it up" do
-        foo = mock!.name { :foo }.subject
-        UrCPU::Assembler::Parser::Token::Base.save(foo)
-        token = UrCPU::Assembler::Parser::Token::Base.lookup(:foo)
-        token.should be_eql(foo)
       end
     end
   end
