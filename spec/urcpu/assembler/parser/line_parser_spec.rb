@@ -37,6 +37,14 @@ describe UrCPU::Assembler::Parser::LineParser do
         result = @result_klass.new([:mov, :eax])
         @line_type.match("mov %eax").should == result
       end
+      
+      it "can use string literals in the specification" do
+        line_type = @parser_klass::LineParser.new(
+          klass = UrCPU::Assembler::Parser::Result::Discard, 
+          ['cows', :space, 'are', :space, 'great']
+        )
+        line_type.match("cows are great").should == klass.new([""])
+      end
     end
 
     describe "unsuccessful" do

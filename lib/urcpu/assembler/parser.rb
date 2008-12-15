@@ -28,21 +28,21 @@ module UrCPU
             [:ins, :space, :operand, :comma, :operand, :eol]),
           LineParser.new(Result::Instruction, [:ins, :space, :operand, :eol]),
           LineParser.new(Result::Instruction, [:ins, :eol]),
-          LineParser.new(Result::Label, [:label, :colon, :eol]),
-          LineParser.new(Result::Discard, [:hash, :rest_of_line]),
-          LineParser.new(Result::String, [:dot, :ascii, :space, :string, :eol]),
-          LineParser.new(Result::Long, [:dot, :long, :space, :long_value, :eol]),
-          LineParser.new(Result::Align, [:dot, :align, :space, :digit, :eol]),
+          LineParser.new(Result::Label, [:label, ':', :eol]),
+          LineParser.new(Result::Discard, ['#', :rest_of_line]),
+          LineParser.new(Result::String, ['.ascii', :space, :string, :eol]),
+          LineParser.new(Result::Long, ['.long', :space, :long_value, :eol]),
+          LineParser.new(Result::Align, ['.align', :space, :digit, :eol]),
           LineParser.new(Result::Section, 
-            [:dot, :section, :space, :dot, :section_name, :eol]),
-          LineParser.new(Result::Section, [:dot, :text, :eol]),
-          LineParser.new(Result::Section, [:dot, :bss, :eol]),
-          LineParser.new(Result::Section, [:dot, :globl, :space, :label, :eol]),
-          LineParser.new(Result::Discard, [:dot, :type, :rest_of_line]),
-          LineParser.new(Result::Discard, [:dot, :size, :rest_of_line]),
-          LineParser.new(Result::Discard, [:dot, :weak, :rest_of_line]),
+            ['.section', :space, '.', :section_name, :eol]),
+          LineParser.new(Result::Section, [:text, :eol]),
+          LineParser.new(Result::Section, [:bss, :eol]),
+          LineParser.new(Result::Section, ['.globl', :space, :label, :eol]),
+          LineParser.new(Result::Discard, ['.type', :rest_of_line]),
+          LineParser.new(Result::Discard, ['.size', :rest_of_line]),
+          LineParser.new(Result::Discard, ['.weak', :rest_of_line]),
           LineParser.new(Result::Space, 
-            [:dot, :space_directive, :space, :space_value, :eol]),
+            ['.space', :space, :space_value, :eol]),
         ]
       end
       
@@ -56,22 +56,10 @@ module UrCPU
         Token.register(:section_name, /(rodata|bss|data)/) { |sec| sec.to_sym }
         Token.register(:space, /\s+/)
         Token.register(:comma, /,\s*/)
-        Token.register(:colon, /:/)
         Token.register(:eol, /\s*$/)
-        Token.register(:hash, /#/)
         Token.register(:rest_of_line, /.*$/)
-        Token.register(:dot, /\./)
-        Token.register(:ascii, /ascii/)
-        Token.register(:long, /long/)
-        Token.register(:align, /align/)
-        Token.register(:section, /section/)
-        Token.register(:type, /type/)
-        Token.register(:size, /size/)
-        Token.register(:weak, /weak/)
-        Token.register(:globl, /globl/)
-        Token.register(:text, /text/) { :text }
-        Token.register(:bss, /bss/) { :bss }
-        Token.register(:space_directive, /space/)
+        Token.register(:text, /\.text/) { :text }
+        Token.register(:bss, /\.bss/) { :bss }
         
         Token::AddressMode.register(:adr)
         Token::Arithmetic.register(:arth)

@@ -8,7 +8,18 @@ module UrCPU
       
         def initialize(result_klass, token_names)
           @result_klass = result_klass
-          @tokens = token_names.map { |name| Token.lookup(name) }
+          @tokens = lookup_tokens token_names
+        end
+        
+        def lookup_tokens(names)
+          names.map do |name|
+            case name
+            when Symbol: Token.lookup(name)
+            when String: Token::Base.new(name, Regexp.escape(name))
+            else
+              raise UrCPU::ParseError, "Unknown token name: #{name.inspect}"
+            end
+          end
         end
         
         def match(line)
