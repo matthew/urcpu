@@ -36,8 +36,13 @@ module UrCPU
           LineParser.new(Result::Section, 
             [:dot, :section, :space, :dot, :section_name, :eol]),
           LineParser.new(Result::Section, [:dot, :text, :eol]),
+          LineParser.new(Result::Section, [:dot, :bss, :eol]),
+          LineParser.new(Result::Section, [:dot, :globl, :space, :label, :eol]),
           LineParser.new(Result::Discard, [:dot, :type, :rest_of_line]),
-          LineParser.new(Result::Discard, [:dot, :size, :rest_of_line])
+          LineParser.new(Result::Discard, [:dot, :size, :rest_of_line]),
+          LineParser.new(Result::Discard, [:dot, :weak, :rest_of_line]),
+          LineParser.new(Result::Space, 
+            [:dot, :space_directive, :space, :space_value, :eol]),
         ]
       end
       
@@ -47,7 +52,6 @@ module UrCPU
         Token.register(:absolute, /\*%(\w+)/) { |reg| reg.to_sym }
         Token.register(:label, /(\w+)/) { |lbl| lbl.to_sym }
         Token.register(:digit, /(-?\d+)/) { |digit| digit.to_i }
-        Token.register(:text, /(text)/) { |text| text.to_sym }
         Token.register(:hexdigit, /(-?0x[\da-fA-F]+)/) { |hex| eval hex }
         Token.register(:section_name, /(rodata|bss|data)/) { |sec| sec.to_sym }
         Token.register(:space, /\s+/)
@@ -63,6 +67,11 @@ module UrCPU
         Token.register(:section, /section/)
         Token.register(:type, /type/)
         Token.register(:size, /size/)
+        Token.register(:weak, /weak/)
+        Token.register(:globl, /globl/)
+        Token.register(:text, /text/) { :text }
+        Token.register(:bss, /bss/) { :bss }
+        Token.register(:space_directive, /space/)
         
         Token::AddressMode.register(:adr)
         Token::Arithmetic.register(:arth)
@@ -83,6 +92,11 @@ module UrCPU
           Token.lookup(:hexdigit),
           Token.lookup(:digit),
           Token.lookup(:label),
+        ])
+
+        Token::Composite.register(:space_value, [
+          Token.lookup(:arth),
+          Token.lookup(:digit)
         ])
       end
     end

@@ -175,6 +175,20 @@ describe UrCPU::Assembler::Parser do
           p('.align 4').should == @align_result.new([4])
         end
       end
+      
+      describe ".space" do
+        before do
+          @space_result = UrCPU::Assembler::Parser::Result::Space
+        end
+        
+        it "parses .space SIZE" do
+          p('.space 1024').should == @space_result.new([1024])
+        end
+
+        it "parses .space EXPR" do
+          p('.space 97*42').should == @space_result.new([97*42])
+        end
+      end
 
       describe ".section" do
         before do
@@ -194,23 +208,39 @@ describe UrCPU::Assembler::Parser do
           end
         end
 
-        describe ".type" do
-          before do
-            @comment_result = UrCPU::Assembler::Parser::Result::Discard
+        describe ".bss" do
+          it "parses correctly" do
+            p('.bss').should == @section_result.new([:bss])
           end
-          
+        end
+        
+        describe ".globl" do
           it "discards these types" do
-            p('.type _foobar, @function').should == @comment_result.new([""])
+            p('.globl _start').should == @section_result.new([:_start])
           end
         end
 
-        describe ".size" do
+        describe "ignored directives" do
           before do
-            @comment_result = UrCPU::Assembler::Parser::Result::Discard
+            @discard_result = UrCPU::Assembler::Parser::Result::Discard
+          end
+
+          describe ".type" do
+            it "discards these types" do
+              p('.type _foobar, @function').should == @discard_result.new([""])
+            end
+          end
+
+          describe ".size" do
+            it "discards these lines" do
+              p('.size _foobar, .-_foobar').should == @discard_result.new([""])
+            end
           end
           
-          it "discards these types" do
-            p('.size _foobar, .-_foobar').should == @comment_result.new([""])
+          describe ".weak" do
+            it "discards these lines" do
+              p('.weak _start').should == @discard_result.new([""])
+            end
           end
         end
       end
@@ -218,8 +248,8 @@ describe UrCPU::Assembler::Parser do
   
     describe "comment" do
       it "parses a comment" do
-        @comment_result_klass = UrCPU::Assembler::Parser::Result::Discard
-        p("# I am a comment").should == @comment_result_klass.new([])
+        @discard_result = UrCPU::Assembler::Parser::Result::Discard
+        p("# I am a comment").should == @discard_result.new([])
       end
     end
   end
