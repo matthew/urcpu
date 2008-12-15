@@ -177,10 +177,17 @@ describe UrCPU::Assembler::Parser do
           @section_result = UrCPU::Assembler::Parser::Result::Section
         end
         
-        it "parses correct" do
+        it "parses correctly" do
           p('.section .data').should == @section_result.new([:data])
           p('.section .bss').should == @section_result.new([:bss])
           p('.section .rodata').should == @section_result.new([:rodata])
+          p('.section .rodata  ').should == @section_result.new([:rodata])
+        end
+        
+        describe ".text" do
+          it "parses correctly" do
+            p('.text').should == @section_result.new([:text])
+          end
         end
       end
     end
